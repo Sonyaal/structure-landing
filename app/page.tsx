@@ -1,5 +1,4 @@
 import ContactForm from "@/components/contact-form"
-import DemoForm from "@/components/demo-form"
 import FeaturesSection from "@/components/features-section"
 import HeroSection from "@/components/title-section"
 import Navbar from "@/components/navbar"
@@ -11,9 +10,6 @@ export default function Home() {
       <Navbar />
       <HeroSection />
       <FeaturesSection />
-      <div className="py-16">
-        <DemoForm />
-      </div>
       <div className="py-16">
         <ContactForm />
       </div>

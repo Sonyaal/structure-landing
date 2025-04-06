@@ -1,12 +1,18 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import FadeInSection from "./fade-in-section"
+import DemoDialog from "./demo-dialog"
+import { Button } from "@/components/ui/button"
 
 export default function HeroSection() {
   const [email, setEmail] = useState("")
+  const [dialogOpen, setDialogOpen] = useState(false)
+
+  const handleDemoClick = () => {
+    setDialogOpen(true)
+  }
 
   return (
     <FadeInSection>
@@ -32,12 +38,12 @@ export default function HeroSection() {
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-4 py-3 rounded-full border border-gray-300 focus:outline-none"
                 />
-                <Link
-                  href="#demo"
-                  className="absolute right-0 top-0 bottom-0 flex items-center px-6 bg-gradient-to-r from-[#e67e22] to-[#f39c12] text-white rounded-full"
+                <button
+                  onClick={handleDemoClick}
+                  className="absolute right-0 top-0 bottom-0 flex items-center px-6 bg-gradient-to-r from-[#e67e22] to-[#f39c12] text-white rounded-full hover:opacity-90"
                 >
                   Request a Demo <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+                </button>
               </div>
             </div>
           </div>
@@ -75,6 +81,7 @@ export default function HeroSection() {
             </div>
           </div>
         </div>
+        <DemoDialog open={dialogOpen} onOpenChange={setDialogOpen} initialEmail={email} />
       </section>
     </FadeInSection>
   )
