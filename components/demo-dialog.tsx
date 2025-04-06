@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   Dialog,
   DialogContent,
@@ -25,6 +25,14 @@ export default function DemoDialog({ open, onOpenChange, initialEmail = "" }: De
     company: "",
     email: initialEmail,
   })
+
+  // Update formData when initialEmail changes
+  useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      email: initialEmail
+    }))
+  }, [initialEmail])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target

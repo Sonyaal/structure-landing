@@ -9,8 +9,18 @@ import { Button } from "@/components/ui/button"
 export default function HeroSection() {
   const [email, setEmail] = useState("")
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [emailError, setEmailError] = useState("")
 
   const handleDemoClick = () => {
+    if (!email) {
+      setEmailError("Please enter your email")
+      return
+    }
+    if (!email.includes("@")) {
+      setEmailError("Please enter a valid email")
+      return
+    }
+    setEmailError("")
     setDialogOpen(true)
   }
 
@@ -35,9 +45,19 @@ export default function HeroSection() {
                   type="email"
                   placeholder="Your email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-full border border-gray-300 focus:outline-none"
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                    setEmailError("")
+                  }}
+                  className={`w-full px-4 py-3 rounded-full border ${
+                    emailError ? "border-red-500" : "border-gray-300"
+                  } focus:outline-none`}
                 />
+                {emailError && (
+                  <p className="absolute -bottom-6 left-0 text-sm text-red-500">
+                    {emailError}
+                  </p>
+                )}
                 <button
                   onClick={handleDemoClick}
                   className="absolute right-0 top-0 bottom-0 flex items-center px-6 bg-gradient-to-r from-[#e67e22] to-[#f39c12] text-white rounded-full hover:opacity-90"
