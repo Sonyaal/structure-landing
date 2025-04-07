@@ -3,7 +3,6 @@
 import { z } from "zod"
 import nodemailer from "nodemailer"
 
-// Define validation schema for the contact form
 const contactFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
@@ -15,23 +14,19 @@ type ContactFormData = z.infer<typeof contactFormSchema>
 
 export async function sendContactEmail(formData: ContactFormData) {
   try {
-    // Validate form data
     const validatedData = contactFormSchema.parse(formData)
 
-    // Create a transporter
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        // In a real application, these would be environment variables
-        user: "your-email@gmail.com", // Replace with your email for sending
-        pass: "structure1234", // Replace with your app password
+        user: process.env.GMAIL_USER,  // recommended
+        pass: process.env.GMAIL_PASS,  // recommended
       },
     })
 
-    // Email content
     const mailOptions = {
-      from: "your-email@gmail.com", // Replace with your email
-      to: "sonyaale05@gmail.com",
+      from: process.env.GMAIL_USER, // your sending email
+      to: "structure.create@gmail.com", // updated recipient
       subject: `Contact Form: ${validatedData.firstName} ${validatedData.lastName}`,
       text: `
         Name: ${validatedData.firstName} ${validatedData.lastName}
@@ -49,12 +44,7 @@ export async function sendContactEmail(formData: ContactFormData) {
       `,
     }
 
-    // For demonstration purposes, we'll log the email content instead of actually sending it
-    // In a real application, you would uncomment the line below to send the email
-    console.log("Email would be sent with:", mailOptions)
-
-    // Uncomment to actually send the email
-    await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions)
 
     return { success: true, message: "Email sent successfully!" }
   } catch (error) {
@@ -63,10 +53,12 @@ export async function sendContactEmail(formData: ContactFormData) {
       return {
         success: false,
         message: "Validation error",
-        errors: error.errors.map((e) => ({ field: e.path.join("."), message: e.message })),
+        errors: error.errors.map((e) => ({
+          field: e.path.join("."),
+          message: e.message,
+        })),
       }
     }
     return { success: false, message: "Failed to send email. Please try again later." }
   }
 }
-

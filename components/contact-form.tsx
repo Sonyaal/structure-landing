@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import FadeInSection from "./fade-in-section"
 import { sendContactEmail } from "@/lib/actions"
@@ -56,11 +54,18 @@ export default function ContactForm() {
           message: result.message || "Something went wrong. Please try again.",
         })
       }
-    } catch (error) {
-      setStatus({
-        type: "error",
-        message: "An unexpected error occurred. Please try again later.",
-      })
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setStatus({
+          type: "error",
+          message: error.message || "An unexpected error occurred. Please try again later.",
+        })
+      } else {
+        setStatus({
+          type: "error",
+          message: "An unexpected error occurred. Please try again later.",
+        })
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -170,4 +175,3 @@ export default function ContactForm() {
     </FadeInSection>
   )
 }
-
